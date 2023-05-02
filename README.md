@@ -1,2 +1,3 @@
-# template-public
-general template for public repositories
+# 1Password Connect - Terraform config for AWS ECS
+
+
