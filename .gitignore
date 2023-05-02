@@ -9,3 +9,6 @@
 node_modules/
 vendor/
 .terraform/
+
+# 1Password credentials
+1password-credentials.json
