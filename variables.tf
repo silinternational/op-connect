@@ -30,22 +30,22 @@ variable "customer" {
 
 variable "api_cpu" {
   description = "cpu size for connect-api container"
-  default     = "128"
+  default     = 128
 }
 
 variable "api_memory" {
   description = "memory size for connect-api container"
-  default     = "128"
+  default     = 128
 }
 
 variable "sync_cpu" {
   description = "cpu size for connect-sync container"
-  default     = "32"
+  default     = 32
 }
 
 variable "sync_memory" {
   description = "memory size for connect-sync container"
-  default     = "32"
+  default     = 32
 }
 
 variable "desired_count" {
@@ -70,7 +70,7 @@ variable "log_level" {
 
 variable "use_lets_encrypt" {
   description = "set to true to enable Let's Encrypt for connect-api"
-  default     = true
+  default     = false
 }
 
 /*

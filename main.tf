@@ -18,13 +18,13 @@ resource "aws_alb_target_group" "one" {
 
   health_check {
     path                = "/heartbeat"
-    matcher             = "204"
+    matcher             = "200"
     protocol            = "HTTP"
     port                = local.api_http_port
-    timeout             = "5" # seconds
-    interval            = "5" # seconds
-    healthy_threshold   = "2" # count
-    unhealthy_threshold = "2" # count
+    timeout             = 4 # seconds
+    interval            = 5 # seconds
+    healthy_threshold   = 2 # count
+    unhealthy_threshold = 2 # count
   }
 
   tags = {
@@ -124,10 +124,10 @@ locals {
             name  = "OP_LOG_LEVEL"
             value = var.log_level
           },
-          {
-            name  = "OP_TLS_USE_LETSENCRYPT"
-            value = var.use_lets_encrypt ? "true" : ""
-          },
+          #          {
+          #            name  = "OP_TLS_USE_LETSENCRYPT"
+          #            value = var.use_lets_encrypt ? "true" : ""
+          #          },
           {
             name  = "OP_TLS_DOMAIN"
             value = cloudflare_record.cname.hostname
@@ -201,7 +201,7 @@ resource "cloudflare_record" "cname" {
   name    = var.subdomain
   value   = data.terraform_remote_state.common.outputs.alb_dns_name
   type    = "CNAME"
-  proxied = true
+  proxied = false
 }
 
 data "cloudflare_zones" "domain" {
