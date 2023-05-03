@@ -30,12 +30,12 @@ variable "customer" {
 
 variable "api_cpu" {
   description = "cpu size for connect-api container"
-  default     = 128
+  default     = 32
 }
 
 variable "api_memory" {
   description = "memory size for connect-api container"
-  default     = 128
+  default     = 32
 }
 
 variable "sync_cpu" {
