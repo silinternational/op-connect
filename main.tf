@@ -11,8 +11,8 @@ locals {
  */
 resource "aws_alb_target_group" "one" {
   name                 = substr("tg-${local.app_name_and_env}", 0, 32)
-  protocol             = var.use_lets_encrypt ? "HTTPS" : "HTTP"
-  port                 = local.api_traffic_port
+  protocol             = "HTTPS"
+  port                 = local.api_https_port
   vpc_id               = data.terraform_remote_state.common.outputs.vpc_id
   deregistration_delay = "30"
 
@@ -66,7 +66,6 @@ resource "aws_cloudwatch_log_group" "one" {
   }
 }
 
-
 /*
  * Create container definition for the service
  */
@@ -74,7 +73,6 @@ locals {
   api_container_name = "${var.app_name}-api"
   api_http_port      = "8080"
   api_https_port     = "8443"
-  api_traffic_port   = var.use_lets_encrypt ? local.api_https_port : local.api_http_port
 
   task_def = jsonencode(
     [
@@ -124,14 +122,6 @@ locals {
             name  = "OP_LOG_LEVEL"
             value = var.log_level
           },
-          #          {
-          #            name  = "OP_TLS_USE_LETSENCRYPT"
-          #            value = var.use_lets_encrypt ? "true" : ""
-          #          },
-          {
-            name  = "OP_TLS_DOMAIN"
-            value = cloudflare_record.cname.hostname
-          },
         ]
       },
       {
@@ -166,6 +156,14 @@ locals {
             name  = "OP_LOG_LEVEL"
             value = var.log_level
           },
+          {
+            name = "OP_TLS_KEY_FILE"
+            value = tls_private_key.edd25519.private_key_pem
+          },
+          {
+            name = "OP_TLS_CERT_FILE"
+            value = tls_self_signed_cert.one.cert_pem
+          }
         ]
       }
     ]
@@ -210,4 +208,22 @@ data "cloudflare_zones" "domain" {
     lookup_type = "exact"
     status      = "active"
   }
+}
+
+resource "tls_self_signed_cert" "one" {
+  private_key_pem = tls_private_key.edd25519.private_key_pem
+
+  validity_period_hours = 87600
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+
+  dns_names = ["localhost"]
+}
+
+resource "tls_private_key" "edd25519" {
+  algorithm   = "ED25519"
 }

@@ -68,11 +68,6 @@ variable "log_level" {
   default     = "info"
 }
 
-variable "use_lets_encrypt" {
-  description = "set to true to enable Let's Encrypt for connect-api"
-  default     = false
-}
-
 /*
  * Provider configuration
  */
