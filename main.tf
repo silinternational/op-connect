@@ -199,7 +199,7 @@ resource "cloudflare_record" "cname" {
   name    = var.subdomain
   value   = data.terraform_remote_state.common.outputs.alb_dns_name
   type    = "CNAME"
-  proxied = true
+  proxied = var.cloudflare_proxy_enable
 }
 
 data "cloudflare_zones" "domain" {

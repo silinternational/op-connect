@@ -91,3 +91,8 @@ variable "cloudflare_token" {
   sensitive   = true
 }
 
+variable "cloudflare_proxy_enable" {
+  description = "Set to true to enable Cloudflare proxy on the DNS record"
+  type = bool
+  default = false
+}
