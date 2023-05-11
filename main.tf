@@ -122,6 +122,14 @@ locals {
             name  = "OP_LOG_LEVEL"
             value = var.log_level
           },
+          {
+            name = "OP_TLS_KEY_FILE"
+            value = tls_private_key.edd25519.private_key_pem
+          },
+          {
+            name = "OP_TLS_CERT_FILE"
+            value = tls_self_signed_cert.one.cert_pem
+          }
         ]
       },
       {
@@ -156,14 +164,6 @@ locals {
             name  = "OP_LOG_LEVEL"
             value = var.log_level
           },
-          {
-            name = "OP_TLS_KEY_FILE"
-            value = tls_private_key.edd25519.private_key_pem
-          },
-          {
-            name = "OP_TLS_CERT_FILE"
-            value = tls_self_signed_cert.one.cert_pem
-          }
         ]
       }
     ]
