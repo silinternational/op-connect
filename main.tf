@@ -123,12 +123,12 @@ locals {
             value = var.log_level
           },
           {
-            name = "OP_TLS_KEY_FILE"
-            value = tls_private_key.edd25519.private_key_pem
+            name = "OP_TLS_USE_LETSENCRYPT"
+            value = "true"
           },
           {
-            name = "OP_TLS_CERT_FILE"
-            value = tls_self_signed_cert.one.cert_pem
+            name = "OP_TLS_DOMAIN"
+            value = cloudflare_record.cname.hostname
           }
         ]
       },
@@ -208,22 +208,4 @@ data "cloudflare_zones" "domain" {
     lookup_type = "exact"
     status      = "active"
   }
-}
-
-resource "tls_self_signed_cert" "one" {
-  private_key_pem = tls_private_key.edd25519.private_key_pem
-
-  validity_period_hours = 87600
-
-  allowed_uses = [
-    "key_encipherment",
-    "digital_signature",
-    "server_auth",
-  ]
-
-  dns_names = ["localhost"]
-}
-
-resource "tls_private_key" "edd25519" {
-  algorithm   = "ED25519"
 }
